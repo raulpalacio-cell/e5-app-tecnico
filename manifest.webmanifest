@@ -3,34 +3,18 @@
   "short_name": "E5 Técnico",
   "description": "Agenda e execução de limpeza de painéis da E5 Solar Energia",
   "lang": "pt-BR",
-  "start_url": "/e5-app-tecnico/tecnico",
-  "scope": "/e5-app-tecnico/",
+  "start_url": "tecnico",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#7d8f2c",
   "icons": [
-    {
-      "src": "/e5-app-tecnico/icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/e5-app-tecnico/icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    },
-    {
-      "src": "/e5-app-tecnico/icons/maskable-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
-    }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    {
-      "name": "Agenda do dia",
-      "url": "/e5-app-tecnico/tecnico"
-    }
+    { "name": "Agenda do dia", "url": "tecnico" }
   ]
 }
