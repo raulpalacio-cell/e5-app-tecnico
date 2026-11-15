@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#7d8f2c" />
+  <title>Definir senha · E5 Técnico</title>
+  <link rel="stylesheet" href="/e5-app-tecnico/assets/index-BYMu7itv.css" />
+  <style>
+    body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(to bottom right,#f6f9ec,#fff,#fff8eb);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px}
+    .card{background:#fff;border-radius:16px;box-shadow:0 8px 30px rgba(0,0,0,.06);padding:24px;max-width:24rem;width:100%}
+    h1{font-size:1.125rem;text-align:center;margin:0 0 16px}
+    label{display:block;font-size:.8rem;font-weight:600;margin:0 0 4px;color:#3e471e}
+    input{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #d5dbb8;border-radius:10px;margin-bottom:12px;font-size:1rem}
+    button{width:100%;padding:12px;border:0;border-radius:10px;background:#7d8f2c;color:#fff;font-weight:700;font-size:1rem;cursor:pointer}
+    button:disabled{opacity:.6}
+    .msg{margin:0 0 12px;padding:10px 12px;border-radius:10px;font-size:.9rem}
+    .erro{background:#fff1f2;color:#be123c}
+    .ok{background:#f0fdf4;color:#166534}
+    img{display:block;margin:0 auto 16px;height:64px}
+  </style>
+</head>
+<body>
+  <form class="card" id="f">
+    <img src="/e5-app-tecnico/brand/logo-paisagem.png" alt="E5 Solar Energia" />
+    <h1>Definir sua senha</h1>
+    <p id="status" class="msg" hidden></p>
+    <div id="campos">
+      <label for="senha">Nova senha</label>
+      <input id="senha" name="senha" type="password" required minlength="8" autocomplete="new-password" />
+      <label for="senha2">Repetir senha</label>
+      <input id="senha2" name="senha2" type="password" required minlength="8" autocomplete="new-password" />
+      <button type="submit" id="btn">Salvar senha</button>
+    </div>
+  </form>
+  <script>
+  (function(){
+    var URL = "https://tlonnxtsclsxfjrilmea.supabase.co";
+    var ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRsb25ueHRzY2xzeGZqcmlsbWVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEzMzMwNzYsImV4cCI6MjEwNjkwOTA3Nn0.AdQiYCmiZl_kbMA-Q5NaPYyFVmKy3R7ZeAkweuH9ULw";
+    var params = new URLSearchParams(location.hash.replace(/^#/, "") + "&" + location.search.replace(/^\?/, ""));
+    var token = params.get("access_token");
+    var typ = params.get("type") || "";
+    var status = document.getElementById("status");
+    var campos = document.getElementById("campos");
+    function show(kind, text){
+      status.hidden = false;
+      status.className = "msg " + kind;
+      status.textContent = text;
+    }
+    if(!token && typ!=="invite" && typ!=="recovery" && typ!=="signup"){
+      // Sometimes tokens arrive after a redirect in the hash; wait a tick.
+    }
+    if(!token){
+      show("erro", "Este link expirou ou não é válido. Peça um novo convite.");
+      campos.hidden = true;
+      return;
+    }
+    document.getElementById("f").addEventListener("submit", async function(e){
+      e.preventDefault();
+      var s1 = document.getElementById("senha").value;
+      var s2 = document.getElementById("senha2").value;
+      if(s1.length < 8){ show("erro","A senha precisa ter pelo menos 8 caracteres."); return; }
+      if(s1 !== s2){ show("erro","As senhas não são iguais."); return; }
+      document.getElementById("btn").disabled = true;
+      try{
+        var r = await fetch(URL + "/auth/v1/user", {
+          method: "PUT",
+          headers: { apikey: ANON, Authorization: "Bearer " + token, "content-type": "application/json" },
+          body: JSON.stringify({ password: s1 })
+        });
+        if(!r.ok){
+          var t = await r.text();
+          show("erro", "Não deu para salvar a senha. Tente o link de novo ou peça outro convite.");
+          document.getElementById("btn").disabled = false;
+          return;
+        }
+        campos.hidden = true;
+        show("ok", "Senha definida. Você já pode entrar no app.");
+        var p = document.createElement("p");
+        p.style.textAlign="center";
+        p.innerHTML = '<a href="/e5-app-tecnico/" style="color:#7d8f2c;font-weight:700">Ir para o login</a>';
+        document.getElementById("f").appendChild(p);
+      }catch(err){
+        show("erro", "Falha de conexão. Verifique a internet e tente de novo.");
+        document.getElementById("btn").disabled = false;
+      }
+    });
+  })();
+  </script>
+</body>
+</html>
