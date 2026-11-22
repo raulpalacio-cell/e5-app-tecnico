@@ -1,6 +1,6 @@
 // App do técnico: guarda a casca (para abrir sem sinal) e as fotos já vistas.
 // Envios (chegada, fotos, conclusão) ficam na fila do IndexedDB, não aqui.
-const CACHE = "e5-v3";
+const CACHE = "e5-v4";
 // O service worker pode estar em /sw.js ou em /e5-app-tecnico/sw.js.
 const BASE = new URL("./", self.location).pathname.replace(/\/$/, "");
 const abs = (p) => BASE + p;
